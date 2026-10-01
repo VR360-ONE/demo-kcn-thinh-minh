@@ -30,7 +30,11 @@ fi
 : "${FTP_REMOTE_BASE:=du-an}"
 : "${DEPLOY_SUBDIR:=kcn-thinh-minh-360-demo}"
 
-if [[ -z "${FTP_PASS:-}" ]]; then
+# 2026-10-01: VPS đã tắt FTP (port 21) → mặc định SFTP (key ~/.ssh/id_ed25519, đăng ký ở /etc/ssh/authorized_keys/<user> trên VPS).
+: "${FTP_PROTO:=sftp}"          # sftp | ftp (ftp chỉ dùng cho host khác còn FTP)
+: "${SFTP_HOST:=116.118.50.146}" # stg.vr360.one đi qua proxy Cloudflare, không SSH được
+: "${SFTP_KEY:=$HOME/.ssh/id_ed25519}"
+if [[ "$FTP_PROTO" == ftp && -z "${FTP_PASS:-}" ]]; then
   echo "Thiếu FTP_PASS. Tạo .env.deploy với FTP_PASS=... hoặc export trước khi chạy." >&2
   exit 1
 fi
@@ -48,7 +52,12 @@ trap 'rm -f "$LFTP_SCRIPT"' EXIT
 {
   printf '%s\n' "set ssl:verify-certificate no"
   printf '%s\n' "set ftp:passive-mode true"
-  printf 'open -u %s,%s -p %s %s\n' "$FTP_USER" "$FTP_PASS" "$FTP_PORT" "$FTP_HOST"
+  if [[ "$FTP_PROTO" == sftp ]]; then
+    printf '%s\n' "set sftp:connect-program \"ssh -a -x -o BatchMode=yes -i $SFTP_KEY\""
+    printf 'open -u %s, sftp://%s\n' "$FTP_USER" "$SFTP_HOST"
+  else
+    printf 'open -u %s,%s -p %s %s\n' "$FTP_USER" "$FTP_PASS" "$FTP_PORT" "$FTP_HOST"
+  fi
   printf 'lcd %s\n' "$SCRIPT_DIR"
   printf '%s\n' "mirror -R --verbose --parallel=3 --exclude-glob '.git/**' --exclude-glob '.env*' --exclude-glob '.DS_Store' . ${REMOTE_PATH}"
   printf '%s\n' "bye"

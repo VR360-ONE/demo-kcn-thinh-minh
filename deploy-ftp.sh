@@ -32,7 +32,7 @@ fi
 
 # 2026-10-01: VPS đã tắt FTP (port 21) → mặc định SFTP (key ~/.ssh/id_ed25519, đăng ký ở /etc/ssh/authorized_keys/<user> trên VPS).
 : "${FTP_PROTO:=sftp}"          # sftp | ftp (ftp chỉ dùng cho host khác còn FTP)
-: "${SFTP_HOST:=116.118.50.146}" # stg.vr360.one đi qua proxy Cloudflare, không SSH được
+: "${SFTP_HOST:=180.93.3.175}" # stg.vr360.one đi qua proxy Cloudflare, không SSH được
 : "${SFTP_KEY:=$HOME/.ssh/id_ed25519}"
 if [[ "$FTP_PROTO" == ftp && -z "${FTP_PASS:-}" ]]; then
   echo "Thiếu FTP_PASS. Tạo .env.deploy với FTP_PASS=... hoặc export trước khi chạy." >&2

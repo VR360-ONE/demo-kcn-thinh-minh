@@ -9,7 +9,7 @@ Tài liệu mô tả cách đẩy **site tĩnh** (HTML/JS/CSS/assets) lên FTP `
 ## GitHub org VR360-ONE (quy ước cùng deploy FTP)
 
 - **FTP ≠ Git:** deploy FTP **không** tự push GitHub; push Git **không** tự upload FTP.
-- **Quy ước VR360-ONE:** khi **deploy staging** (`./deploy-ftp.sh`) thì **cũng** **`git commit` + `git push`** lên repo org **[VR360-ONE](https://github.com/VR360-ONE)** (repo ví dụ: [kcn-thinh-minh-360-demo](https://github.com/VR360-ONE/kcn-thinh-minh-360-demo)), để source trên Git khớp bản đang chạy trên `stg.vr360.one`.
+- **Quy ước VR360-ONE:** khi **deploy staging** (`./deploy-ftp.sh`) thì **cũng** **`git commit` + `git push`** lên repo org **[VR360-ONE](https://github.com/VR360-ONE)** (repo ví dụ: [demo-kcn-thinh-minh](https://github.com/VR360-ONE/demo-kcn-thinh-minh)), để source trên Git khớp bản đang chạy trên `stg.vr360.one`.
 - **Thứ tự nên làm:** commit → `git push` → `./deploy-ftp.sh`.
 - Org: [github.com/orgs/VR360-ONE/dashboard](https://github.com/orgs/VR360-ONE/dashboard).
 
